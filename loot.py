@@ -28,14 +28,24 @@ response = requests.post(mUrl, json=data)
 
 if __name__ == '__main__':
     ## install stuff
-    print('Setting up virtual window size...')
     chrome_options = Options()
     chrome_options.add_argument('--disable-notifications')
     chrome_options.add_argument('--headless=chrome')
     chrome_options.add_argument('window-size=1920x1080')
+    chrome_options.add_argument('-disable-gpu')
+    chrome_options.add_argument('--disable-logging')
+    chrome_options.add_argument('--log-level=3')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_extension('tamper.crx')
-    driver = webdriver.Chrome(options=chrome_options)
-    print('Finished setting virtual window.')
+    # if os is not windows
+    if os.name != 'nt':
+        chrome_options.binary_location = "/usr/bin/google-chrome"
+        print("Yay! Linux user!")
+    else:
+        print("Yay! Windows user!")
+    driver = webdriver.Chrome("chromedriver.exe",options=chrome_options)
+    print('Set window size')
     driver.set_window_size(150, 380)
     print('Installing Extensions...')
 
