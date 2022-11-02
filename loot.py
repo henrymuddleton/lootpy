@@ -40,7 +40,10 @@ if __name__ == '__main__':
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_extension('tamper.crx')
-    driver = webdriver.Chrome(os.path.abspath("chromedriver.exe"),options=chrome_options)
+    if os.name == 'nt': # if the OS is windows
+        driver = webdriver.Chrome(os.path.abspath("chromedriver.exe"),options=chrome_options)
+    else:
+        driver = webdriver.Chrome(os.path.abspath("chromedriver"),options=chrome_options)
     print('Set window size')
     print('Installing Extensions...')
 
