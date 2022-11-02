@@ -1,3 +1,4 @@
+#!/bin/sh
 import time
 import requests
 import os
