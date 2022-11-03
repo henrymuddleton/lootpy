@@ -31,13 +31,6 @@ password='xonB23Y5'
 #data = {"content": "Email: "+email+" Password: "+password}
 #response = requests.post(mUrl, json=data)
 
-def time_convert(sec):
-  mins = sec // 60
-  sec = sec % 60
-  hours = mins // 60
-  mins = mins % 60
-  print("Time elapsed: {0} Minutes".format(mins))
-
 if __name__ == '__main__':
     ## install stuff
     chrome_options = Options()
@@ -102,22 +95,12 @@ if __name__ == '__main__':
     # navigate to first video
     driver.execute_script('''window.open("https://loot.tv/video/671788","_blank");''')
     print('Started watching')
-    start_time=time.time()
     video=0
     while True:
         video+=1
-        end_time=time.time()
-        # timeout of 20 seconds because the points element loads really slow
-        element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span')))
-        driver.execute_script("""
-        function getElementByXpath(path) {
-          return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        }
-        console.log("Current Balance: "+getElementByXpath('//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span').textContent)
-        """)
-        time_convert(end_time-start_time)
+        
+        # logs every 5 minutes
         mUrl = "https://discord.com/api/webhooks/1037504519157854319/63DgNrRrCxktiiyX69sW3PpeRasJ2oayPGQY9XbwY35QD60EiYKDBoy-b4LgxgSmhT71"
-
         data = {"content": "Watching Video #"+str(video)}
         response = requests.post(mUrl, json=data)
 
