@@ -107,6 +107,7 @@ if __name__ == '__main__':
     while True:
         video+=1
         end_time=time.time()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span')))
         points=driver.find_element(by='xpath',value='//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span').text
         print("Current Balance: "+str(points))
         time_convert(end_time-start_time)
