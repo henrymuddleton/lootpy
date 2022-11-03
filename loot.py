@@ -103,13 +103,18 @@ if __name__ == '__main__':
     driver.execute_script('''window.open("https://loot.tv/video/671788","_blank");''')
     print('Started watching')
     start_time=time.time()
-    video=1
+    video=0
     while True:
         video+=1
         end_time=time.time()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span')))
-        points=driver.find_element(by='xpath',value='//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span').text
-        print("Current Balance: "+str(points))
+        # timeout of 20 seconds because the points element loads really slow
+        element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span')))
+        driver.execute_script("""
+        function getElementByXpath(path) {
+          return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        }
+        console.log("Current Balance: "+getElementByXpath('//*[@id="__next"]/div/div[1]/div[5]/div/a[1]/div/span').textContent)
+        """)
         time_convert(end_time-start_time)
         mUrl = "https://discord.com/api/webhooks/1037504519157854319/63DgNrRrCxktiiyX69sW3PpeRasJ2oayPGQY9XbwY35QD60EiYKDBoy-b4LgxgSmhT71"
 
