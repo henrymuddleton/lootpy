@@ -2,6 +2,7 @@ import time
 import requests
 import os
 import warnings
+import random
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -19,8 +20,10 @@ print("""
                                                              
 """)
 
-email='logjefferson6@gmail.com'
-password='xonB23Y5'
+email='mmater343@gmail.com'
+password='xonB23Y5#'
+url = "https://discord.com/api/webhooks/1037869989748813876/DN1NWSkRVCzz_hAgA7W7487kcHmPUkPYVOCqtFF5FOMt0eUStBFln1MFB_ZgXrmjIal8"
+random_videos=['https://loot.tv/video/671788','https://loot.tv/video/671973', 'https://loot.tv/video/671838', 'https://loot.tv/video/671716','https://loot.tv/video/671965','https://loot.tv/video/672037','https://loot.tv/video/672420']
 
 #email = input('Email: ')
 #password = input('Password: ')
@@ -87,29 +90,41 @@ if __name__ == '__main__':
     time.sleep(5)
 
     # navigate to first video
-    driver.get('https://loot.tv/video/671788')
+    driver.get(random.choice(random_videos))
     print('Started watching '+driver.current_url)
     images=1
-    screenshot_image=''
+    screenshot_image='screenshot'+str(images)+'.png'
     driver.save_screenshot('screenshot{0}.png'.format(images))
+    # posts 1st screenshot
+    files = { "file" : (screenshot_image, open(screenshot_image, 'rb')) }
+    result = requests.post(url, files=files)
+    # time flag is 0
     time_flag=0
     while True:
         # if the time on the same URL >= 15 minutes
         if time_flag >= 30: # 30 = 30 x 20 seconds = 600 seconds = 10 minutes
-            driver.get('https://loot.tv/video/672766')
+            driver.get(random.choice(random_videos))
+            
+            images+=1
+            screenshot_image='screenshot'+str(images)+'.png'
+            driver.save_screenshot('screenshot{0}.png'.format(images))
+            url = "https://discord.com/api/webhooks/1037869989748813876/DN1NWSkRVCzz_hAgA7W7487kcHmPUkPYVOCqtFF5FOMt0eUStBFln1MFB_ZgXrmjIal8"
+            files = { "file" : (screenshot_image, open(screenshot_image, 'rb')) }
+            result = requests.post(url, files=files)
+    
             print('Switched video because of delay')
+            time_flag=0
+            
         url=driver.current_url
         time.sleep(20)
         # if the url is not the same url
         if driver.current_url != url:
             print("Switched to video: "+driver.current_url)
             images+=1
-            screenshot_image='screenshot'+str(images)+'.png'
-            # takes screenshot
             driver.save_screenshot('screenshot{0}.png'.format(images))
-            # sends screenshot
+            screenshot_image='screenshot'+str(images)+'.png'
+            files = { "file" : (screenshot_image, open(screenshot_image, 'rb')) }
             url = "https://discord.com/api/webhooks/1037869989748813876/DN1NWSkRVCzz_hAgA7W7487kcHmPUkPYVOCqtFF5FOMt0eUStBFln1MFB_ZgXrmjIal8"
-            files = { "file" : (str(screenshot_image), open(str(screenshot_image), 'rb')) }
             result = requests.post(url, files=files)
         # if the URl stays the same (20 seconds have passed and URL is still the same)
         else:
