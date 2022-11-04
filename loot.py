@@ -91,7 +91,7 @@ if __name__ == '__main__':
     print('Started watching '+driver.current_url)
     images=1
     screenshot_image=''
-    driver.save_screenshot('screenshot{0}.jpg'.format(images))
+    driver.save_screenshot('screenshot{0}.png'.format(images))
     time_flag=0
     while True:
         # if the time on the same URL >= 15 minutes
@@ -104,9 +104,9 @@ if __name__ == '__main__':
         if driver.current_url != url:
             print("Switched to video: "+driver.current_url)
             images+=1
-            screenshot_image='screenshot'+str(images)+'.jpg'
+            screenshot_image='screenshot'+str(images)+'.png'
             # takes screenshot
-            driver.save_screenshot('screenshot{0}.jpg'.format(images))
+            driver.save_screenshot('screenshot{0}.png'.format(images))
             # sends screenshot
             url = "https://discord.com/api/webhooks/1037869989748813876/DN1NWSkRVCzz_hAgA7W7487kcHmPUkPYVOCqtFF5FOMt0eUStBFln1MFB_ZgXrmjIal8"
             files = { "file" : (str(screenshot_image), open(str(screenshot_image), 'rb')) }
