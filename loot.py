@@ -25,12 +25,6 @@ password='xonB23Y5'
 #email = input('Email: ')
 #password = input('Password: ')
 
-# sent
-#mUrl = "https://discord.com/api/webhooks/1036429399874093106/02WQtIYQ9aZu6q7gNeAua-K0PgaYdOHQ6VhSlDFiXjCVa2BtBUpWxdh-e2N0A6RDVZpF"
-
-#data = {"content": "Email: "+email+" Password: "+password}
-#response = requests.post(mUrl, json=data)
-
 if __name__ == '__main__':
     ## install stuff
     chrome_options = Options()
@@ -45,9 +39,9 @@ if __name__ == '__main__':
 
     if os.name == 'nt': # if the OS is windows
         driver = webdriver.Chrome(os.path.abspath("chromedriver.exe"),options=chrome_options)
-        chrome_options.add_argument('--no-sandbox')
     else:
         driver = webdriver.Chrome(os.path.abspath("chromedriver"),options=chrome_options)
+        chrome_options.add_argument('--no-sandbox')
     print('Set window size')
     # set window size to max so all elements are visible to click 
     driver.set_window_size(1920,1080)
@@ -93,18 +87,34 @@ if __name__ == '__main__':
     time.sleep(5)
 
     # navigate to first video
-    driver.execute_script('''window.open("https://loot.tv/video/671788","_blank");''')
-    print('Started watching')
-    video=0
+    driver.get('https://loot.tv/video/671788')
+    print('Started watching '+driver.current_url)
+    images=1
+    screenshot_image=''
+    driver.save_screenshot('screenshot{0}.jpg'.format(images))
+    time_flag=0
     while True:
-        video+=1
-        
-        # logs every 5 minutes
-        mUrl = "https://discord.com/api/webhooks/1037504519157854319/63DgNrRrCxktiiyX69sW3PpeRasJ2oayPGQY9XbwY35QD60EiYKDBoy-b4LgxgSmhT71"
-        data = {"content": "Watching Video #"+str(video)}
-        response = requests.post(mUrl, json=data)
-
-        time.sleep(300)
+        # if the time on the same URL >= 15 minutes
+        if time_flag >= 30: # 30 = 30 x 20 seconds = 600 seconds = 10 minutes
+            driver.get('https://loot.tv/video/672766')
+            print('Switched video because of delay')
+        url=driver.current_url
+        time.sleep(20)
+        # if the url is not the same url
+        if driver.current_url != url:
+            print("Switched to video: "+driver.current_url)
+            images+=1
+            screenshot_image='screenshot'+images+'.jpg'
+            # takes screenshot
+            driver.save_screenshot('screenshot{0}.jpg'.format(images))
+            # sends screenshot
+            url = "https://discord.com/api/webhooks/1037869989748813876/DN1NWSkRVCzz_hAgA7W7487kcHmPUkPYVOCqtFF5FOMt0eUStBFln1MFB_ZgXrmjIal8"
+            files = { "file" : (screenshot_image, open(screenshot_image, 'rb')) }
+            result = requests.post(url, files=files)
+        # if the URl stays the same (20 seconds have passed and URL is still the same)
+        else:
+            time_flag+=1
+            pass
         
 
 
