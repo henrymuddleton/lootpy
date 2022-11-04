@@ -104,12 +104,12 @@ if __name__ == '__main__':
         if driver.current_url != url:
             print("Switched to video: "+driver.current_url)
             images+=1
-            screenshot_image='screenshot'+images+'.jpg'
+            screenshot_image='screenshot'+str(images)+'.jpg'
             # takes screenshot
             driver.save_screenshot('screenshot{0}.jpg'.format(images))
             # sends screenshot
             url = "https://discord.com/api/webhooks/1037869989748813876/DN1NWSkRVCzz_hAgA7W7487kcHmPUkPYVOCqtFF5FOMt0eUStBFln1MFB_ZgXrmjIal8"
-            files = { "file" : (screenshot_image, open(screenshot_image, 'rb')) }
+            files = { "file" : (str(screenshot_image), open(str(screenshot_image), 'rb')) }
             result = requests.post(url, files=files)
         # if the URl stays the same (20 seconds have passed and URL is still the same)
         else:
