@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium_stealth import stealth
 
 print("""
 ██╗      ██████╗  ██████╗ ████████╗██████╗  ██████╗ ████████╗
@@ -31,17 +32,17 @@ random_videos=['https://loot.tv/video/671788','https://loot.tv/video/671973', 'h
 if __name__ == '__main__':
     print("Installing Configs...")
     ## install stuff
-    user_agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
     
     chrome_options = Options()
     chrome_options.add_argument('--disable-notifications')
     chrome_options.add_argument('--headless=chrome')
-    chrome_options.add_argument(f'user-agent={user_agent}')
     chrome_options.add_argument('window-size=1920x1080')
+    chrome_options.add_argument("start-maximized")
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--disable-logging')
     chrome_options.add_argument('--log-level=3')
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_extension('tamper.crx')
     print("Installed Configs")
 
@@ -53,6 +54,15 @@ if __name__ == '__main__':
     # set window size to max so all elements are visible to click 
     driver.maximize_window()
     print('Installing Extensions...')
+
+    stealth(driver,
+        languages=["en-US", "en"],
+        vendor="Google Inc.",
+        platform="Win32",
+        webgl_vendor="Intel Inc.",
+        renderer="Intel Iris OpenGL Engine",
+        fix_hairline=True,
+        )
 
     ## install focus
     # go to install page
